@@ -57,4 +57,14 @@ public class CarController : MonoBehaviour
         transform.rotation = isMovingLeft ? Quaternion.Euler(0, 90, 0) : Quaternion.Euler(0, 0, 0);  
         isMovingLeft = !isMovingLeft;
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Diamond")
+        {
+            other.gameObject.SetActive(false);
+            GameManager.instance.IncrementScore(10);
+            GameManager.instance.CollectDiamondAudio();
+        }
+    }
 }

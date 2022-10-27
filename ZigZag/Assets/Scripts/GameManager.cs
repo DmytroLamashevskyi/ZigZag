@@ -16,7 +16,8 @@ public class GameManager : MonoBehaviour
     public GameObject UIPanel;
     private int score;
     private int hightScore;
-
+    
+    public AudioClip diamondClip; 
     public AudioClip[] audioClips; 
     AudioSource audioSource;
     // Start is called before the first frame update
@@ -79,9 +80,14 @@ public class GameManager : MonoBehaviour
         while (isGameStarted)
         {
             yield return new WaitForSeconds(1);
-            score++;
-            scoreText.text = score.ToString();
+            IncrementScore(1);
         }
+    }
+
+    public void IncrementScore(int value)
+    {
+        score += value;
+        scoreText.text = score.ToString();
     }
 
     void SaveHigthScore()
@@ -98,5 +104,10 @@ public class GameManager : MonoBehaviour
         {
             PlayerPrefs.SetInt("HightScore", 0);
         }
+    }
+
+    public void CollectDiamondAudio()
+    {
+        audioSource.PlayOneShot(diamondClip);
     }
 }
