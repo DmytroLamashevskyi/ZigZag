@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(AudioSource))]
 public class GameManager : MonoBehaviour
 {
     public Text scoreText;
@@ -14,12 +16,16 @@ public class GameManager : MonoBehaviour
     public GameObject UIPanel;
     private int score;
     private int hightScore;
+
+    public AudioClip[] audioClips; 
+    AudioSource audioSource;
     // Start is called before the first frame update
     void Awake()
     {
         if(instance == null)
         {
             instance = this;
+            audioSource =  gameObject.GetComponent<AudioSource>();
         }
     }
 
@@ -27,12 +33,20 @@ public class GameManager : MonoBehaviour
     {
         hightScore = PlayerPrefs.GetInt("HightScore");
         hightScoreText.text = hightScore.ToString();
+        audioSource = gameObject.GetComponent<AudioSource>();
+        if (audioClips.Count() >= 1 )
+        {
+            audioSource.clip = audioClips.FirstOrDefault();
+            audioSource.Play();
+        }
     }
 
     public void Update()
     {
         if (!isGameStarted && Input.GetMouseButtonDown(0))
         {
+            audioSource.clip = audioClips[Random.Range(1,audioClips.Count())];
+            audioSource.Play();
             GameStart();
         }
     }
